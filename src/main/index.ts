@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, ipcMain } from 'electron';
 import { join } from 'path';
 import { format } from 'url';
 
@@ -31,10 +31,19 @@ if (!gotTheLock) {
   async function createWindow() {
     mainWindow = new BrowserWindow({
       show: false,
+      width: 1148,
+      height: 624,
+      minWidth: 200,
+      minHeight: 200,
+      backgroundColor: '#0C0C0C',
+      transparent: true,
+      opacity: 0.95,
+      frame: false,
       webPreferences: {
         preload: join(__dirname, '../preload/index.cjs.js'),
         contextIsolation: env.MODE !== 'test', // Spectron tests can't work with contextIsolation: true
         enableRemoteModule: env.MODE === 'test',
+        nodeIntegration: true
         // sandbox: true, // Spectron tests can't work with enableRemoteModule: false
       },
     });
@@ -48,10 +57,10 @@ if (!gotTheLock) {
       env.MODE === 'development'
         ? env.VITE_DEV_SERVER_URL
         : format({
-            protocol: 'file',
-            pathname: join(__dirname, '../renderer/index.html'),
-            slashes: true,
-          });
+          protocol: 'file',
+          pathname: join(__dirname, '../renderer/index.html'),
+          slashes: true,
+        });
 
     await mainWindow.loadURL(URL);
     mainWindow.maximize();
@@ -89,4 +98,21 @@ if (!gotTheLock) {
       .then(({ autoUpdater }) => autoUpdater.checkForUpdatesAndNotify())
       .catch((e) => console.error('Failed check updates:', e));
   }
+
+
+  ipcMain.on('window:close', function () {
+    app.quit();
+  })
+
+  ipcMain.on('window:minimise', function () {
+    mainWindow!.minimize()
+  })
+
+  ipcMain.on('window:maximise', function () {
+    if (mainWindow!.isMaximized()) {
+      mainWindow!.restore()
+    } else {
+      mainWindow!.maximize()
+    }
+  })
 }

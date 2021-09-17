@@ -1,44 +1,43 @@
-import React, { useState } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { MouseEvent, useState } from 'react';
+import { AppIconContainer, Container, Header, Title } from './App.style';
+import Button from './components/Button/Button';
+import closeIcon from './icons/close-white.png';
+import minimiseIcon from './icons/minimise-white.png';
+import maximiseIcon from './icons/maximise-white.png';
+import { useElectron } from './use/electron';
+import { Editor } from './components/Editor/Editor';
 
 const App: React.FC = () => {
-  const [count, setCount] = useState(0);
+  const electron = useElectron();
+
+  const handleClose = (e: MouseEvent<HTMLButtonElement>) => {
+    electron.closeWindow();
+  };
+  const handleMinimise = (e: MouseEvent<HTMLButtonElement>) => {
+    electron.minimiseWindow();
+  };
+  const handleMaximise = (e: MouseEvent<HTMLButtonElement>) => {
+    electron.maximiseWindow();
+  };
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>Hello Vite + React!</p>
-        <p>
-          <button onClick={() => setCount((count) => count + 1)}>
-            count is: {count}
-          </button>
-        </p>
-        <p>
-          Edit <code>App.tsx</code> and save to test HMR updates.
-        </p>
-        <p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-          {' | '}
-          <a
-            className="App-link"
-            href="https://vitejs.dev/guide/features.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Vite Docs
-          </a>
-        </p>
-      </header>
-    </div>
+    <Container>
+      <Header>
+        <Title>Terminal</Title>
+        <AppIconContainer>
+          <Button onClick={handleMinimise}>
+            <img src={minimiseIcon} />
+          </Button>
+          <Button onClick={handleMaximise}>
+            <img src={maximiseIcon} />
+          </Button>
+          <Button accentColor="red" onClick={handleClose}>
+            <img src={closeIcon} />
+          </Button>
+        </AppIconContainer>
+      </Header>
+      <Editor />
+    </Container>
   );
 };
 
