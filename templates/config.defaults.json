@@ -1,0 +1,8 @@
+{
+  "hosts": [
+    "https://localhost:5898"
+  ],
+	"theme": {
+		"fontColor": "#F9F1A5"
+	}
+}
