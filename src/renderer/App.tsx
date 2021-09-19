@@ -1,11 +1,9 @@
-import React, { MouseEvent, useState } from 'react';
+import React, { MouseEvent, useEffect, useState } from 'react';
 import { AppIconContainer, Container, Header, Title } from './App.style';
 import Button from './components/Button/Button';
-import closeIcon from './icons/close-white.png';
-import minimiseIcon from './icons/minimise-white.png';
-import maximiseIcon from './icons/maximise-white.png';
+import { closeIcon, minimiseIcon, maximiseIcon } from './icons/index';
 import { useElectron } from './use/electron';
-import { Editor } from './components/Editor/Editor';
+import { Terminal } from './components/Terminal/Terminal';
 
 const App: React.FC = () => {
   const electron = useElectron();
@@ -19,6 +17,30 @@ const App: React.FC = () => {
   const handleMaximise = (e: MouseEvent<HTMLButtonElement>) => {
     electron.maximiseWindow();
   };
+
+  const getInstances = async () => {
+    const res = await electron.getInstances();
+    console.log({ instances: res });
+  };
+
+  const setupTheme = async () => {
+    const theme = await electron.getTheme();
+    console.log(theme);
+    Object.keys(theme).forEach((key) => {
+      const cssKey = `--${key}`;
+      const cssValue = theme[key];
+      document.documentElement.style.setProperty(cssKey, cssValue);
+    });
+  };
+
+  useEffect(() => {
+    // let interval = setInterval(() => setupTheme(), 5000);
+
+    setupTheme();
+    getInstances();
+
+    // return () => clearInterval(interval);
+  }, []);
 
   return (
     <Container>
@@ -36,7 +58,7 @@ const App: React.FC = () => {
           </Button>
         </AppIconContainer>
       </Header>
-      <Editor />
+      <Terminal />
     </Container>
   );
 };

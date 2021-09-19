@@ -1,5 +1,6 @@
 {
-  "name": "vite-electron-react-starter",
+  "name": "ti-terminal",
+  "productName": "TI terminal",
   "description": "fork of @cawa-93/vite-electron-builder for react.",
   "private": true,
   "main": "main/index.cjs.js",
@@ -15,7 +16,9 @@
     "watch": "node ./bin/watch.js"
   },
   "devDependencies": {
+    "@types/axios": "^0.14.0",
     "@types/electron-devtools-installer": "^2.2.0",
+    "@types/node": "^16.9.2",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     "@types/styled-components": "^5.1.14",
@@ -35,7 +38,9 @@
     "vite": "^2.0.0-beta.30"
   },
   "dependencies": {
+    "axios": "^0.21.4",
     "electron-updater": "^4.3.5",
+    "https": "^1.0.0",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
     "styled-components": "^5.3.1"

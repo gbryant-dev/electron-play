@@ -9,8 +9,13 @@ const api = {
   versions: process.versions,
   closeWindow: () => ipcRenderer.send('window:close'),
   minimiseWindow: () => ipcRenderer.send('window:minimise'),
-  maximiseWindow: () => ipcRenderer.send('window:maximise')
+  maximiseWindow: () => ipcRenderer.send('window:maximise'),
+  getTheme: () => ipcRenderer.invoke('get:theme'),
+  getInstances: async () => ipcRenderer.invoke('get:instances'),
+  executeProcess: async (instance: string, name: string, parameters?: { Name: string, Value: string | number }[]) => ipcRenderer.invoke('process:execute', instance, name, parameters)
+
 } as const;
+
 
 
 export type ExposedInMainWorld = Readonly<typeof api>;
